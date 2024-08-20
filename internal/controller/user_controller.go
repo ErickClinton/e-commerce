@@ -1,26 +1,38 @@
-package controller
+package controllers
 
 import (
 	"eccomerce/internal/services"
+
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct {
+type UserRoutesController struct {
 	userService *services.UserService
 }
 
-func NewUserController(router *gin.Engine) {
-	service := services.NewUserService()
-	controller := &UserController{
-		userService: service,
+func ConfigureUserRoutes(router *gin.Engine, userService *services.UserService) {
+	controller := &UserRoutesController{
+		userService: userService,
 	}
 
-	// Define a rota GET para listar usuários
-	router.GET("/users", controller.ListUsers)
+	router.POST("/users", controller.CreateUser)
+	router.GET("/users/:id", controller.GetUser)
+	router.PUT("/users/:id", controller.UpdateUser)
+	router.DELETE("/users/:id", controller.DeleteUser)
+}
+
+func (c *UserRoutesController) CreateUser(ctx *gin.Context) {
 
 }
 
-func (ctrl *UserController) ListUsers(c *gin.Context) {
-	users := ctrl.userService.ListUsers()
-	c.JSON(200, users)
+func (c *UserRoutesController) GetUser(ctx *gin.Context) {
+
+}
+
+func (c *UserRoutesController) UpdateUser(ctx *gin.Context) {
+
+}
+
+func (c *UserRoutesController) DeleteUser(ctx *gin.Context) {
+
 }
