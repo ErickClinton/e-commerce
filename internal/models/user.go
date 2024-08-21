@@ -8,7 +8,6 @@ type User struct {
 	Role     string `gorm:"not null"`
 }
 
-// CreateUserRequest representa os dados da requisição para criar um usuário.
 type CreateUserRequest struct {
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
