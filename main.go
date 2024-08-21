@@ -1,7 +1,8 @@
 package main
 
 import (
-	"eccomerce/internal/controller"
+	"eccomerce/configs"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -9,7 +10,7 @@ func main() {
 	router := gin.Default()
 
 	// Inicia o controller que já contém as rotas
-	controller.NewUserController(router)
+	router = configs.InitializeApp()
 
 	router.Run(":8080")
 }
