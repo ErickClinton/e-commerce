@@ -113,5 +113,5 @@ func (h *Handler) Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": token})
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }

@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -102,8 +103,8 @@ func (s *service) Login(request *dto.LoginUserRequest) (string, error) {
 	if !authentication.CheckPasswordHash(request.Password, user.Password) {
 		return "", errors.New("invalid email or password")
 	}
-
-	tokenManager := authentication.NewTokenManager("SilentTidesGuardTheShorelinesOfTomorrow_2024", time.Hour*24)
+	secretKey := os.Getenv("SECRET_KEY")
+	tokenManager := authentication.NewTokenManager(secretKey, time.Hour*24)
 
 	token, err := tokenManager.GenerateToken(fmt.Sprintf("%d", user.ID), user.Role)
 	if err != nil {
