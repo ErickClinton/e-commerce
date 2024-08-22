@@ -1,15 +1,16 @@
 package main
 
 import (
+	"eccomerce/api/v1/user"
 	"eccomerce/configs"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := gin.Default()
+	r := gin.Default()
+	db := configs.SetupDatabase()
+	user.RegisterRoutes(r, db)
 
-	router = configs.InitializeApp()
-
-	router.Run(":8080")
+	r.Run(":8080")
 }
