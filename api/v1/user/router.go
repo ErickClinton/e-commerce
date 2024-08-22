@@ -17,7 +17,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	{
 		v1.POST("/", handler.create)
 		v1.GET("/:id", handler.GetByID)
-		v1.PUT("/:id", handler.Update)
+		v1.PUT("/:id", handler.UpdateById)
 		v1.DELETE("/:id", handler.Delete)
 	}
 }
