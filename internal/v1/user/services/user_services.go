@@ -4,14 +4,19 @@ import (
 	"eccomerce/internal/v1/entity"
 	"eccomerce/internal/v1/user/dto"
 	"eccomerce/internal/v1/user/repository"
+	"eccomerce/pkg/authentication"
 	"eccomerce/pkg/utils"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"time"
 )
 
 type Service interface {
 	utils.Service[dto.CreateUserRequest, entity.User]
 	GetByEmail(email string) (*entity.User, error)
 	UpdateById(request *dto.CreateUserRequest, id int) error
+	Login(request *dto.LoginUserRequest) (string, error)
 }
 
 type service struct {
@@ -25,9 +30,13 @@ func NewService(repo repository.UserRepository) Service {
 func (s *service) Create(user *dto.CreateUserRequest) error {
 	userJSON, _ := json.MarshalIndent(user, "", "    ")
 	utils.Logger.Info().Msgf("Start method create %v", string(userJSON))
+	hashedPassword, err := authentication.HashPassword(user.Password)
+	if err != nil {
+		return errors.New("Unable to create password. Please try again later.")
+	}
 	entityUser := &entity.User{
 		Email:    user.Email,
-		Password: user.Password,
+		Password: hashedPassword,
 		Role:     user.Role,
 		Username: user.Username,
 	}
@@ -79,4 +88,27 @@ func (s *service) Delete(id uint) error {
 	idJSON, _ := json.MarshalIndent(id, "", "    ")
 	utils.Logger.Info().Msgf("Start method Delete %v", string(idJSON))
 	return s.repo.Delete(id)
+}
+
+func (s *service) Login(request *dto.LoginUserRequest) (string, error) {
+	requestJSON, _ := json.MarshalIndent(request, "", "    ")
+	utils.Logger.Info().Msgf("Start method Login %v", string(requestJSON))
+
+	user, err := s.repo.GetByEmail(request.Email)
+	if err != nil {
+		return "", errors.New("invalid email or password")
+	}
+
+	if !authentication.CheckPasswordHash(request.Password, user.Password) {
+		return "", errors.New("invalid email or password")
+	}
+
+	tokenManager := authentication.NewTokenManager("SilentTidesGuardTheShorelinesOfTomorrow_2024", time.Hour*24)
+
+	token, err := tokenManager.GenerateToken(fmt.Sprintf("%d", user.ID), user.Role)
+	if err != nil {
+		return "", errors.New("could not generate token")
+	}
+
+	return token, nil
 }
