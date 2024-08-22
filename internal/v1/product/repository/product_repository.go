@@ -2,12 +2,14 @@ package repository
 
 import (
 	"eccomerce/internal/v1/entity"
+	"eccomerce/internal/v1/product/dto"
 	"eccomerce/pkg/utils"
 	"gorm.io/gorm"
 )
 
 type ProductRepository interface {
 	utils.Repository[entity.Product]
+	UpdateById(updateDto *dto.UpdateProductRequest, id int) error
 }
 
 type productRepository struct {
@@ -32,6 +34,10 @@ func (r *productRepository) GetByID(id uint) (*entity.Product, error) {
 
 func (r *productRepository) Update(product *entity.Product) error {
 	return r.db.Save(product).Error
+}
+
+func (r *productRepository) UpdateById(updateProductDto *dto.UpdateProductRequest, id int) error {
+	return r.db.Model(&entity.Product{}).Where("id = ?", id).Updates(updateProductDto).First(&updateProductDto, id).Error
 }
 
 func (r *productRepository) Delete(id uint) error {
