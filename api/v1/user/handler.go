@@ -1,7 +1,7 @@
 package user
 
 import (
-	"eccomerce/internal/v1/user/models"
+	"eccomerce/internal/v1/user/entity"
 	"eccomerce/internal/v1/user/services"
 	"eccomerce/pkg/utils"
 	"net/http"
@@ -21,7 +21,7 @@ func NewHandler(service services.Service) *Handler {
 func (h *Handler) create(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method create")
 
-	var input models.User
+	var input entity.User
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		utils.Logger.Error().Msgf("Error method create %s", err.Error())
@@ -54,7 +54,7 @@ func (h *Handler) Update(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method UpdateUser")
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	var input models.User
+	var input entity.User
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		utils.Logger.Error().Msgf("Error method UpdateUser %s", err.Error())

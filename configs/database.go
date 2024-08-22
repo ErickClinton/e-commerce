@@ -1,7 +1,8 @@
 package configs
 
 import (
-	"eccomerce/internal/v1/user/models"
+	"eccomerce/internal/v1/user/entity"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,7 +13,7 @@ func SetupDatabase() *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	err = db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&entity.User{})
 	if err != nil {
 		panic("failed to migrate database")
 	}
