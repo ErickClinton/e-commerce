@@ -3,14 +3,16 @@ package services
 import (
 	"eccomerce/internal/v1/user/models"
 	"eccomerce/internal/v1/user/repository"
+	"eccomerce/pkg/utils"
+	"encoding/json"
 )
 
 type Service interface {
-	RegisterUser(user *models.User) error
-	GetUserByID(id uint) (*models.User, error)
-	GetUserByEmail(email string) (*models.User, error)
-	UpdateUser(user *models.User) error
-	DeleteUser(id uint) error
+	Create(user *models.User) error
+	GetByID(id uint) (*models.User, error)
+	GetByEmail(email string) (*models.User, error)
+	Update(user *models.User) error
+	Delete(id uint) error
 }
 
 type service struct {
@@ -21,22 +23,32 @@ func NewService(repo repository.UserRepository) Service {
 	return &service{repo: repo}
 }
 
-func (s *service) RegisterUser(user *models.User) error {
-	return s.repo.CreateUser(user)
+func (s *service) Create(user *models.User) error {
+	userJSON, _ := json.MarshalIndent(user, "", "    ")
+	utils.Logger.Info().Msgf("Start method create %v", string(userJSON))
+	return s.repo.Create(user)
 }
 
-func (s *service) GetUserByID(id uint) (*models.User, error) {
-	return s.repo.GetUserByID(id)
+func (s *service) GetByID(id uint) (*models.User, error) {
+	idJSON, _ := json.MarshalIndent(id, "", "    ")
+	utils.Logger.Info().Msgf("Start method GetByID %v", string(idJSON))
+	return s.repo.GetByID(id)
 }
 
-func (s *service) GetUserByEmail(email string) (*models.User, error) {
-	return s.repo.GetUserByEmail(email)
+func (s *service) GetByEmail(email string) (*models.User, error) {
+	emailJSON, _ := json.MarshalIndent(email, "", "    ")
+	utils.Logger.Info().Msgf("Start method GetByEmail %v", string(emailJSON))
+	return s.repo.GetByEmail(email)
 }
 
-func (s *service) UpdateUser(user *models.User) error {
-	return s.repo.UpdateUser(user)
+func (s *service) Update(user *models.User) error {
+	userJSON, _ := json.MarshalIndent(user, "", "    ")
+	utils.Logger.Info().Msgf("Start method Update %v", string(userJSON))
+	return s.repo.Update(user)
 }
 
-func (s *service) DeleteUser(id uint) error {
-	return s.repo.DeleteUser(id)
+func (s *service) Delete(id uint) error {
+	idJSON, _ := json.MarshalIndent(id, "", "    ")
+	utils.Logger.Info().Msgf("Start method Delete %v", string(idJSON))
+	return s.repo.Delete(id)
 }
