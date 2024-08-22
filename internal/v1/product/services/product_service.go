@@ -10,7 +10,7 @@ import (
 
 type ProductService interface {
 	utils.Service[dto.CreateProductRequest, entity.Product]
-	UpdateById(dto *dto.CreateProductRequest, id int) error
+	UpdateById(dto *dto.UpdateProductRequest, id int) error
 }
 
 type product struct {
@@ -49,20 +49,14 @@ func (s *product) Update(product *dto.CreateProductRequest) error {
 	return s.repository.Update(entityProduct)
 }
 
-func (s *product) UpdateById(product *dto.CreateProductRequest, id int) error {
+func (s *product) UpdateById(product *dto.UpdateProductRequest, id int) error {
 	userJSON, error := json.MarshalIndent(product, "", "    ")
 	if error != nil {
 		return error
 	}
 	utils.Logger.Info().Msgf("Start method Update %v", string(userJSON))
 
-	entityProduct := &entity.Product{
-		ID:          uint(id),
-		Description: product.Description,
-		Title:       product.Title,
-		Price:       product.Price,
-	}
-	return s.repository.Update(entityProduct)
+	return s.repository.UpdateById(product, id)
 }
 
 func (s *product) Delete(id uint) error {

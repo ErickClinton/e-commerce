@@ -16,8 +16,8 @@ import (
 type Service interface {
 	utils.Service[dto.CreateUserRequest, entity.User]
 	GetByEmail(email string) (*entity.User, error)
-	UpdateById(request *dto.CreateUserRequest, id int) error
 	Login(request *dto.LoginUserRequest) (string, error)
+	UpdateById(request *dto.UpdateUserRequest, id int) error
 }
 
 type service struct {
@@ -68,21 +68,14 @@ func (s *service) Update(user *dto.CreateUserRequest) error {
 	return s.repo.Update(entityUser)
 }
 
-func (s *service) UpdateById(product *dto.CreateUserRequest, id int) error {
-	userJSON, error := json.MarshalIndent(product, "", "    ")
+func (s *service) UpdateById(updateUserDto *dto.UpdateUserRequest, id int) error {
+	userJSON, error := json.MarshalIndent(updateUserDto, "", "    ")
 	if error != nil {
 		return error
 	}
 	utils.Logger.Info().Msgf("Start method Update %v", string(userJSON))
 
-	entityProduct := &entity.User{
-		ID:       uint(id),
-		Role:     product.Role,
-		Username: product.Username,
-		Email:    product.Email,
-		Password: product.Password,
-	}
-	return s.repo.Update(entityProduct)
+	return s.repo.UpdateById(updateUserDto, id)
 }
 
 func (s *service) Delete(id uint) error {
