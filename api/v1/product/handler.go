@@ -53,7 +53,7 @@ func (h *Handler) UpdateById(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method UpdateUser")
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	var input dto.CreateProductRequest
+	var input dto.UpdateProductRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		utils.Logger.Error().Msgf("Error method UpdateUser %s", err.Error())
