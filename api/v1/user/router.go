@@ -12,7 +12,6 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	repo := repository.NewUserRepository(db)
 	service := services.NewService(repo)
 	handler := NewHandler(service)
-
 	v1 := r.Group("/api/v1/users")
 	{
 		v1.POST("/", handler.create)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"eccomerce/api/v1/auth"
 	"eccomerce/api/v1/product"
 	"eccomerce/api/v1/user"
 	"eccomerce/configs"
@@ -14,6 +15,7 @@ func main() {
 	db := configs.SetupDatabase()
 	user.RegisterRoutes(r, db)
 	product.RegisterRoutes(r, db)
+	auth.RegisterRoutes(r, db)
 	utils.ConfigBasicLogger()
 	r.Run(":8080")
 }

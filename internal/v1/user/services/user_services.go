@@ -4,8 +4,10 @@ import (
 	"eccomerce/internal/v1/entity"
 	"eccomerce/internal/v1/user/dto"
 	"eccomerce/internal/v1/user/repository"
+	"eccomerce/pkg/authentication"
 	"eccomerce/pkg/utils"
 	"encoding/json"
+	"errors"
 )
 
 type Service interface {
@@ -25,9 +27,13 @@ func NewService(repo repository.UserRepository) Service {
 func (s *service) Create(user *dto.CreateUserRequest) error {
 	userJSON, _ := json.MarshalIndent(user, "", "    ")
 	utils.Logger.Info().Msgf("Start method create %v", string(userJSON))
+	hashedPassword, err := authentication.HashPassword(user.Password)
+	if err != nil {
+		return errors.New("Unable to create password. Please try again later.")
+	}
 	entityUser := &entity.User{
 		Email:    user.Email,
-		Password: user.Password,
+		Password: hashedPassword,
 		Role:     user.Role,
 		Username: user.Username,
 	}
