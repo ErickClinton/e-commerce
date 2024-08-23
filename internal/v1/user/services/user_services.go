@@ -8,16 +8,12 @@ import (
 	"eccomerce/pkg/utils"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"os"
-	"time"
 )
 
 type Service interface {
 	utils.Service[dto.CreateUserRequest, entity.User]
 	GetByEmail(email string) (*entity.User, error)
 	UpdateById(request *dto.CreateUserRequest, id int) error
-	Login(request *dto.LoginUserRequest) (string, error)
 }
 
 type service struct {
@@ -89,27 +85,4 @@ func (s *service) Delete(id uint) error {
 	idJSON, _ := json.MarshalIndent(id, "", "    ")
 	utils.Logger.Info().Msgf("Start method Delete %v", string(idJSON))
 	return s.repo.Delete(id)
-}
-
-func (s *service) Login(request *dto.LoginUserRequest) (string, error) {
-	requestJSON, _ := json.MarshalIndent(request, "", "    ")
-	utils.Logger.Info().Msgf("Start method Login %v", string(requestJSON))
-
-	user, err := s.repo.GetByEmail(request.Email)
-	if err != nil {
-		return "", errors.New("invalid email or password")
-	}
-
-	if !authentication.CheckPasswordHash(request.Password, user.Password) {
-		return "", errors.New("invalid email or password")
-	}
-	secretKey := os.Getenv("SECRET_KEY")
-	tokenManager := authentication.NewTokenManager(secretKey, time.Hour*24)
-
-	token, err := tokenManager.GenerateToken(fmt.Sprintf("%d", user.ID), user.Role)
-	if err != nil {
-		return "", errors.New("could not generate token")
-	}
-
-	return token, nil
 }
