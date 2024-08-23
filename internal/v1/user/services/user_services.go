@@ -13,7 +13,7 @@ import (
 type Service interface {
 	utils.Service[dto.CreateUserRequest, entity.User]
 	GetByEmail(email string) (*entity.User, error)
-	UpdateById(request *dto.CreateUserRequest, id int) error
+	UpdateById(request *dto.UpdateUserRequest, id int) error
 }
 
 type service struct {
