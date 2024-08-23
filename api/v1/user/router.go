@@ -11,15 +11,13 @@ import (
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	repo := repository.NewUserRepository(db)
 	service := services.NewService(repo)
-	authService := services.NewServiceAuth(repo)
 	handler := NewHandler(service)
-	authHandler := NewHandlerAuth(authService)
 	v1 := r.Group("/api/v1/users")
 	{
 		v1.POST("/", handler.create)
 		v1.GET("/:id", handler.GetByID)
 		v1.PUT("/:id", handler.UpdateById)
 		v1.DELETE("/:id", handler.Delete)
-		v1.POST("/login", authHandler.Login)
+
 	}
 }

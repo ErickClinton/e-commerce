@@ -1,8 +1,8 @@
-package user
+package auth
 
 import (
-	"eccomerce/internal/v1/user/dto"
-	"eccomerce/internal/v1/user/services"
+	"eccomerce/internal/v1/auth/dto"
+	"eccomerce/internal/v1/auth/services"
 	"eccomerce/pkg/utils"
 	"net/http"
 
@@ -19,7 +19,6 @@ func NewHandlerAuth(service services.ServiceAuth) *HandlerAuth {
 
 func (h *HandlerAuth) Login(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method login")
-
 	var input dto.LoginUserRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
