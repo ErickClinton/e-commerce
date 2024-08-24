@@ -15,6 +15,7 @@ var Logger zerolog.Logger
 
 func ConfigBasicLogger() {
 	once.Do(func() {
+
 		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 		zerolog.TimestampFieldName = time.RFC3339Nano
 

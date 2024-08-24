@@ -47,10 +47,12 @@ func (tm *TokenManager) GenerateToken(userID string, role string) (string, error
 
 func (tm *TokenManager) ValidateToken(tokenString string) (*Claims, error) {
 	claims := &Claims{}
+
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
+
 		return tm.secretKey, nil
 	})
 

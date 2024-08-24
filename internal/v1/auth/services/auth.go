@@ -8,8 +8,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 type ServiceAuth interface {
@@ -37,7 +40,13 @@ func (s *serviceAuth) Login(request *dto.LoginUserRequest) (string, error) {
 		return "", errors.New("invalid email or password")
 	}
 
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+	}
 	secretKey := os.Getenv("SECRET_KEY")
+	if secretKey == "" {
+		log.Fatal("SECRET_KEY não definida nas variáveis de ambiente")
+	}
 	tokenManager := authentication.NewTokenManager(secretKey, time.Hour*24)
 
 	token, err := tokenManager.GenerateToken(fmt.Sprintf("%d", user.ID), user.Role)

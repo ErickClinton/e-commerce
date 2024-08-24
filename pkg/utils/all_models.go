@@ -6,7 +6,7 @@ import (
 
 func AllModels() []interface{} {
 	return []interface{}{
-		&entity.Product{},
 		&entity.User{},
+		&entity.Product{},
 	}
 }
