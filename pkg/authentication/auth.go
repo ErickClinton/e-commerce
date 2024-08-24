@@ -17,11 +17,10 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 	secretKey := os.Getenv("SECRET_KEY")
 	if secretKey == "" {
-		log.Fatal("SECRET_KEY não definida nas variáveis de ambiente")
+		log.Fatal("SECRET_KEY is not defined")
 	}
 	tokenExpiry := 24 * time.Hour
-	println(secretKey)
-	println("TESTE MIDDLEWARE")
+
 	tokenService := NewTokenManager(secretKey, tokenExpiry)
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
