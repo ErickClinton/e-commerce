@@ -1,6 +1,7 @@
 package services
 
 import (
+	"eccomerce/configs"
 	"eccomerce/internal/v1/entity"
 	"eccomerce/internal/v1/user/dto"
 	"eccomerce/internal/v1/user/repository"
@@ -70,6 +71,15 @@ func (s *service) UpdateById(updateUserDto *dto.UpdateUserRequest, id int) error
 		return error
 	}
 	utils.Logger.Info().Msgf("Start method Update %v", string(userJSON))
+
+	if err := configs.Validator.Struct(updateUserDto); err != nil {
+		return err
+	}
+
+	if updateUserDto.Password != nil && *updateUserDto.Password != "" {
+		hashedPassword, _ := authentication.HashPassword(*updateUserDto.Password)
+		updateUserDto.Password = &hashedPassword
+	}
 
 	return s.repo.UpdateById(updateUserDto, id)
 }
