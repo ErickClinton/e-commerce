@@ -1,6 +1,7 @@
-package authentication
+package middleware
 
 import (
+	"eccomerce/pkg/authentication"
 	"log"
 	"net/http"
 	"os"
@@ -21,7 +22,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 	tokenExpiry := 24 * time.Hour
 
-	tokenService := NewTokenManager(secretKey, tokenExpiry)
+	tokenService := authentication.NewTokenManager(secretKey, tokenExpiry)
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 
@@ -33,13 +34,16 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
-		_, err := tokenService.ValidateToken(tokenString)
+		claims, err := tokenService.ValidateToken(tokenString)
 
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			c.Abort()
 			return
 		}
+
+		c.Set("userID", claims.UserID)
+		c.Set("userRole", claims.Role)
 		c.Next()
 	}
 
