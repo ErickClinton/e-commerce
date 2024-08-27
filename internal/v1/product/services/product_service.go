@@ -28,6 +28,7 @@ func (s *product) Create(product *dto.CreateProductRequest) error {
 		Description: product.Description,
 		Title:       product.Title,
 		Price:       product.Price,
+		UserId:      product.UserId,
 	}
 	return s.repository.Create(entityProduct)
 }
