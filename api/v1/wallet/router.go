@@ -18,6 +18,5 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	{
 		protectedRoutes.GET("/:id", handler.GetByID)
 		protectedRoutes.PUT("/:id", handler.UpdateById)
-		protectedRoutes.DELETE("/:id", middleware.AuthRoleMiddleware("admin"), handler.Delete)
 	}
 }

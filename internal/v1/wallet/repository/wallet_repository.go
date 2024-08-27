@@ -41,5 +41,5 @@ func (r *walletRepository) UpdateBalance(userId uint, balance float64) error {
 }
 
 func (r *walletRepository) Delete(id uint) error {
-	return r.db.Delete(&entity.Wallet{}, id).Error
+	return r.db.Where("user_id = ?", id).Delete(&entity.Wallet{}).Error
 }

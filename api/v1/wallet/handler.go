@@ -66,8 +66,3 @@ func (h *Handler) UpdateById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": input})
 }
-
-func (h *Handler) Delete(c *gin.Context) {
-	input := "olaa"
-	c.JSON(http.StatusOK, gin.H{"data": input})
-}

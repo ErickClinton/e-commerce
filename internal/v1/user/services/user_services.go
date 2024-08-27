@@ -108,5 +108,9 @@ func (s *service) UpdateById(updateUserDto *dto.UpdateUserRequest, id int) error
 
 func (s *service) Delete(id uint) error {
 	utils.Logger.Info().Msgf("Start method Delete %d", id)
+
+	if err := s.walletService.Delete(id); err != nil {
+		return err
+	}
 	return s.repo.Delete(id)
 }

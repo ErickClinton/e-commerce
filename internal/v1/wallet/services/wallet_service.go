@@ -34,6 +34,7 @@ func (s *walletService) GetByID(id uint) (*entity.Wallet, error) {
 func (s *walletService) Update(wallet *dto.CreateWalletRequest) error {
 
 	return s.repo.UpdateBalance(wallet.UserId, wallet.Balance)
+
 }
 func (s *walletService) Delete(id uint) error {
 	return s.repo.Delete(id)
