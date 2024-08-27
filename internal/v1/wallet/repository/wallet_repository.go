@@ -25,7 +25,7 @@ func (r *walletRepository) Create(wallet *entity.Wallet) error {
 
 func (r *walletRepository) GetByID(id uint) (*entity.Wallet, error) {
 	var wallet entity.Wallet
-	if err := r.db.First(&wallet, id).Error; err != nil {
+	if err := r.db.Where("user_id = ?", id).First(&wallet).Error; err != nil {
 		return nil, err
 	}
 	return &wallet, nil
