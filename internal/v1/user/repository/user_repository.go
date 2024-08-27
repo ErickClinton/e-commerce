@@ -28,7 +28,7 @@ func (r *userRepository) Create(user *entity.User) error {
 
 func (r *userRepository) GetByID(id uint) (*entity.User, error) {
 	var user entity.User
-	if err := r.db.First(&user, id).Error; err != nil {
+	if err := r.db.Model(&entity.User{}).Preload("Products").Preload("Wallet").Where("id = ?", id).Find(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

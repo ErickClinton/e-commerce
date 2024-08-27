@@ -8,5 +8,6 @@ func AllModels() []interface{} {
 	return []interface{}{
 		&entity.User{},
 		&entity.Product{},
+		&entity.Wallet{},
 	}
 }

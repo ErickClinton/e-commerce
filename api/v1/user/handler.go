@@ -18,7 +18,7 @@ func NewHandler(service services.Service) *Handler {
 	return &Handler{service: service}
 }
 
-func (h *Handler) create(c *gin.Context) {
+func (h *Handler) Create(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method create")
 
 	var input dto.CreateUserRequest
@@ -49,7 +49,6 @@ func (h *Handler) GetByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
-
 func (h *Handler) Update(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method UpdateUser")
 
@@ -68,13 +67,13 @@ func (h *Handler) Update(c *gin.Context) {
 }
 
 func (h *Handler) UpdateById(c *gin.Context) {
-	utils.Logger.Info().Msg("Start method UpdateUser")
+	utils.Logger.Info().Msg("Start method UpdateById")
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	var input dto.UpdateUserRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		utils.Logger.Error().Msgf("Error method UpdateUser %s", err.Error())
+		utils.Logger.Error().Msgf("Error method UpdateById %s", err.Error())
 		return
 	}
 
@@ -86,12 +85,12 @@ func (h *Handler) UpdateById(c *gin.Context) {
 }
 
 func (h *Handler) Delete(c *gin.Context) {
-	utils.Logger.Info().Msg("Start method UpdateUser")
+	utils.Logger.Info().Msg("Start method Delete")
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	if err := h.service.Delete(uint(id)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		utils.Logger.Error().Msgf("Error method UpdateUser %s", err.Error())
+		utils.Logger.Error().Msgf("Error method Delete %s", err.Error())
 		return
 	}
 
