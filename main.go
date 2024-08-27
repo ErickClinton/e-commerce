@@ -4,6 +4,7 @@ import (
 	"eccomerce/api/v1/auth"
 	"eccomerce/api/v1/product"
 	"eccomerce/api/v1/user"
+	"eccomerce/api/v1/wallet"
 	"eccomerce/configs"
 	"eccomerce/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ func main() {
 	godotenv.Load()
 	product.RegisterRoutes(r, db)
 	auth.RegisterRoutes(r, db)
+	wallet.RegisterRoutes(r, db)
 	utils.ConfigBasicLogger()
 	r.Run(":8080")
 }

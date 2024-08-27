@@ -31,15 +31,10 @@ func (s *walletService) Create(wallet *dto.CreateWalletRequest) error {
 func (s *walletService) GetByID(id uint) (*entity.Wallet, error) {
 	return s.repo.GetByID(id)
 }
-
 func (s *walletService) Update(wallet *dto.CreateWalletRequest) error {
-	entityWallet := &entity.Wallet{
-		UserId:  wallet.UserId,
-		Balance: wallet.Balance,
-	}
-	return s.repo.Update(entityWallet)
-}
 
+	return s.repo.UpdateBalance(wallet.UserId, wallet.Balance)
+}
 func (s *walletService) Delete(id uint) error {
 	return s.repo.Delete(id)
 }

@@ -8,6 +8,7 @@ import (
 
 type WalletRepository interface {
 	utils.Repository[entity.Wallet]
+	UpdateBalance(userId uint, balance float64) error
 }
 
 type walletRepository struct {
@@ -30,8 +31,13 @@ func (r *walletRepository) GetByID(id uint) (*entity.Wallet, error) {
 	return &wallet, nil
 }
 
-func (r *walletRepository) Update(wallet *entity.Wallet) error {
-	return r.db.Save(wallet).Error
+// Adicione a implementação para Update
+func (r *walletRepository) Update(entity *entity.Wallet) error {
+	return r.db.Save(entity).Error
+}
+
+func (r *walletRepository) UpdateBalance(userId uint, balance float64) error {
+	return r.db.Model(&entity.Wallet{}).Where("user_id = ?", userId).Update("balance", balance).Error
 }
 
 func (r *walletRepository) Delete(id uint) error {
