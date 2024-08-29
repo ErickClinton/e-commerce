@@ -10,5 +10,6 @@ func AllModels() []interface{} {
 		&entity.Cart{},
 		&entity.User{},
 		&entity.Product{},
+		&entity.Wallet{},
 	}
 }
