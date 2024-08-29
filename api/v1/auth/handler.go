@@ -1,8 +1,8 @@
 package auth
 
 import (
+	"eccomerce/internal/v1/auth"
 	"eccomerce/internal/v1/auth/dto"
-	"eccomerce/internal/v1/auth/services"
 	"eccomerce/pkg/utils"
 	"net/http"
 
@@ -10,11 +10,11 @@ import (
 )
 
 type HandlerAuth struct {
-	serviceAuth services.ServiceAuth
+	services auth.ServiceAuth
 }
 
-func NewHandlerAuth(service services.ServiceAuth) *HandlerAuth {
-	return &HandlerAuth{serviceAuth: service}
+func NewHandlerAuth(service auth.ServiceAuth) *HandlerAuth {
+	return &HandlerAuth{services: service}
 }
 
 func (h *HandlerAuth) Login(c *gin.Context) {
@@ -26,7 +26,7 @@ func (h *HandlerAuth) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := h.serviceAuth.Login(&input)
+	token, err := h.services.Login(&input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

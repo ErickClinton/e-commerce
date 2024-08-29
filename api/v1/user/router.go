@@ -3,24 +3,21 @@ package user
 import (
 	"eccomerce/internal/v1/cart"
 	"eccomerce/internal/v1/middleware"
-	"eccomerce/internal/v1/user/repository"
-	"eccomerce/internal/v1/user/services"
-	walletRepo "eccomerce/internal/v1/wallet/repository"
-	walletServices "eccomerce/internal/v1/wallet/services"
-
+	"eccomerce/internal/v1/user"
+	"eccomerce/internal/v1/wallet"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
-	userRepo := repository.NewUserRepository(db)
+	userRepo := user.NewUserRepository(db)
 
-	walletRepo := walletRepo.NewWalletRepository(db)
-	walletService := walletServices.NewWalletService(walletRepo)
+	walletRepo := wallet.NewWalletRepository(db)
+	walletService := wallet.NewWalletService(walletRepo)
 
 	cartRepository := cart.NewCartRepository(db)
 	cartService := cart.NewCartService(cartRepository)
-	service := services.NewService(userRepo, walletService, cartService)
+	service := user.NewService(userRepo, walletService, cartService)
 
 	handler := NewHandler(service)
 

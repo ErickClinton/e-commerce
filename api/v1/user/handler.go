@@ -1,8 +1,8 @@
 package user
 
 import (
+	"eccomerce/internal/v1/user"
 	"eccomerce/internal/v1/user/dto"
-	"eccomerce/internal/v1/user/services"
 	"eccomerce/pkg/utils"
 	"net/http"
 	"strconv"
@@ -11,10 +11,10 @@ import (
 )
 
 type Handler struct {
-	service services.Service
+	service user.Service
 }
 
-func NewHandler(service services.Service) *Handler {
+func NewHandler(service user.Service) *Handler {
 	return &Handler{service: service}
 }
 

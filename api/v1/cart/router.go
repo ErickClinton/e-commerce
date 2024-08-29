@@ -15,7 +15,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	protectedRoutes := r.Group("/api/v1/cart")
 	protectedRoutes.Use(middleware.AuthMiddleware())
 	{
-		protectedRoutes.POST("/", handler.create)
+		protectedRoutes.POST("/", handler.addProductInCart)
 		protectedRoutes.GET("/", handler.get)
 	}
 }

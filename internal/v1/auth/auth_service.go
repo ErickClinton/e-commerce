@@ -1,8 +1,8 @@
-package services
+package auth
 
 import (
 	"eccomerce/internal/v1/auth/dto"
-	"eccomerce/internal/v1/user/services"
+	"eccomerce/internal/v1/user"
 	"eccomerce/pkg/authentication"
 	"eccomerce/pkg/utils"
 	"encoding/json"
@@ -20,10 +20,10 @@ type ServiceAuth interface {
 }
 
 type serviceAuth struct {
-	userService services.Service
+	userService user.Service
 }
 
-func NewServiceAuth(userService services.Service) ServiceAuth {
+func NewServiceAuth(userService user.Service) ServiceAuth {
 	return &serviceAuth{userService: userService}
 }
 

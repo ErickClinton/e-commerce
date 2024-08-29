@@ -1,8 +1,8 @@
 package product
 
 import (
+	"eccomerce/internal/v1/product"
 	"eccomerce/internal/v1/product/dto"
-	"eccomerce/internal/v1/product/services"
 	"eccomerce/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,10 +10,10 @@ import (
 )
 
 type Handler struct {
-	service services.ProductService
+	service product.ProductService
 }
 
-func NewHandler(service services.ProductService) *Handler {
+func NewHandler(service product.ProductService) *Handler {
 	return &Handler{service: service}
 }
 

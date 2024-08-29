@@ -1,8 +1,8 @@
 package wallet
 
 import (
+	"eccomerce/internal/v1/wallet"
 	"eccomerce/internal/v1/wallet/dto"
-	"eccomerce/internal/v1/wallet/services"
 	"eccomerce/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,10 +10,10 @@ import (
 )
 
 type Handler struct {
-	service services.WalletService
+	service wallet.WalletService
 }
 
-func NewHandler(service services.WalletService) *Handler {
+func NewHandler(service wallet.WalletService) *Handler {
 	return &Handler{service: service}
 }
 

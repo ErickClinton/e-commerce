@@ -2,16 +2,14 @@ package product
 
 import (
 	"eccomerce/internal/v1/middleware"
-	"eccomerce/internal/v1/product/repository"
-	"eccomerce/internal/v1/product/services"
-
+	"eccomerce/internal/v1/product"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
-	repo := repository.NewProductRepository(db)
-	service := services.NewProductService(repo)
+	repo := product.NewProductRepository(db)
+	service := product.NewProductService(repo)
 	handler := NewHandler(service)
 
 	v1 := r.Group("/api/v1/product")

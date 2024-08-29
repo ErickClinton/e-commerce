@@ -2,15 +2,14 @@ package wallet
 
 import (
 	"eccomerce/internal/v1/middleware"
-	"eccomerce/internal/v1/wallet/repository"
-	"eccomerce/internal/v1/wallet/services"
+	"eccomerce/internal/v1/wallet"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
-	repo := repository.NewWalletRepository(db)
-	service := services.NewWalletService(repo)
+	repo := wallet.NewWalletRepository(db)
+	service := wallet.NewWalletService(repo)
 	handler := NewHandler(service)
 
 	protectedRoutes := r.Group("/api/v1/wallet")

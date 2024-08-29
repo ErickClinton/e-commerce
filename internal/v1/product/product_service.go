@@ -1,9 +1,8 @@
-package services
+package product
 
 import (
 	"eccomerce/internal/v1/entity"
 	"eccomerce/internal/v1/product/dto"
-	"eccomerce/internal/v1/product/repository"
 	"eccomerce/pkg/utils"
 	"encoding/json"
 )
@@ -14,10 +13,10 @@ type ProductService interface {
 }
 
 type product struct {
-	repository repository.ProductRepository
+	repository ProductRepository
 }
 
-func NewProductService(repository repository.ProductRepository) ProductService {
+func NewProductService(repository ProductRepository) ProductService {
 	return &product{repository: repository}
 
 }

@@ -16,7 +16,7 @@ func NewHandler(service cart.CartService) *Handler {
 	return &Handler{service: service}
 }
 
-func (h *Handler) create(c *gin.Context) {
+func (h *Handler) addProductInCart(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method create")
 	userId, exists := c.Get("userID")
 	if !exists {

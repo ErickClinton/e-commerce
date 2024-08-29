@@ -51,7 +51,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		userID := uint(userIDUint)
 		c.Set("userID", &userID)
 		c.Set("userRole", claims.Role)
-		println(c.Get("userID"))
+		
 		c.Next()
 	}
 

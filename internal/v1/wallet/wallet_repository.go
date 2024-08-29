@@ -1,4 +1,4 @@
-package repository
+package wallet
 
 import (
 	"eccomerce/internal/v1/entity"
@@ -31,7 +31,6 @@ func (r *walletRepository) GetByID(id uint) (*entity.Wallet, error) {
 	return &wallet, nil
 }
 
-// Adicione a implementação para Update
 func (r *walletRepository) Update(entity *entity.Wallet) error {
 	return r.db.Save(entity).Error
 }

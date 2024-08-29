@@ -1,4 +1,4 @@
-package repository
+package user
 
 import (
 	"eccomerce/internal/v1/entity"
