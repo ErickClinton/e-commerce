@@ -8,6 +8,7 @@ import (
 type CartService interface {
 	AddProductById(addProductDto *dto.AddProductInCart, userId uint) *entity.CartProduct
 	GetCartWithProductByUserId(cartId uint) (*entity.Cart, error)
+	Create(userId uint) (*entity.Cart, error)
 }
 
 type cartService struct {
@@ -18,6 +19,14 @@ func NewCartService(repository CartRepository) CartService {
 	return &cartService{repository: repository}
 }
 
+func (service cartService) Create(userId uint) (*entity.Cart, error) {
+
+	cartEntity := &entity.Cart{UserId: userId}
+	cart, _ := service.repository.Create(cartEntity)
+
+	return cart, nil
+
+}
 func (service cartService) AddProductById(productCartDto *dto.AddProductInCart, userId uint) *entity.CartProduct {
 	cartId, _ := service.repository.getCartByUserId(userId)
 	existProduct, _ := service.repository.GetCartProductByCartIdAndProductId(cartId.Id, productCartDto.ProductId)

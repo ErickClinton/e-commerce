@@ -11,6 +11,7 @@ type CartRepository interface {
 	getCartWithProductByUserId(cartId uint) (*entity.Cart, error)
 	getCartByUserId(cartId uint) (*entity.Cart, error)
 	GetCartProductByCartIdAndProductId(cartId uint, productId uint) (*entity.CartProduct, error)
+	Create(cart *entity.Cart) (*entity.Cart, error)
 }
 type cartRepository struct {
 	db *gorm.DB
@@ -20,6 +21,11 @@ func NewCartRepository(db *gorm.DB) CartRepository {
 	return &cartRepository{db: db}
 }
 
+func (c *cartRepository) Create(cart *entity.Cart) (*entity.Cart, error) {
+	if err := c.db.Create(cart).Error; err != nil {
+	}
+	return cart, nil
+}
 func (c *cartRepository) AddProduct(product *entity.CartProduct) (*entity.CartProduct, error) {
 	if err := c.db.Create(product).Error; err != nil {
 		return nil, err
@@ -39,9 +45,6 @@ func (c *cartRepository) GetCartProductByCartIdAndProductId(cartId uint, product
 	var cartProduct entity.CartProduct
 
 	if err := c.db.Where("cart_id = ? AND product_id = ?", cartId, productId).First(&cartProduct).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, nil
-		}
 		return nil, err
 	}
 
@@ -50,7 +53,6 @@ func (c *cartRepository) GetCartProductByCartIdAndProductId(cartId uint, product
 
 func (c *cartRepository) getCartByUserId(userId uint) (*entity.Cart, error) {
 	var cart entity.Cart
-	println(userId)
 	if err := c.db.Where("user_id = ?", userId).First(&cart).Error; err != nil {
 		return nil, err
 	}

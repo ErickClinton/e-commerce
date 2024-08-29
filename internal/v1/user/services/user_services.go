@@ -2,6 +2,7 @@ package services
 
 import (
 	"eccomerce/configs"
+	"eccomerce/internal/v1/cart"
 	"eccomerce/internal/v1/entity"
 	"eccomerce/internal/v1/user/dto"
 	"eccomerce/internal/v1/user/repository"
@@ -18,11 +19,12 @@ type Service interface {
 }
 
 type service struct {
-	repo repository.UserRepository
+	repo        repository.UserRepository
+	cartService cart.CartService
 }
 
-func NewService(repo repository.UserRepository) Service {
-	return &service{repo: repo}
+func NewService(repo repository.UserRepository, cartService cart.CartService) Service {
+	return &service{repo: repo, cartService: cartService}
 }
 
 func (s *service) Create(user *dto.CreateUserRequest) error {
@@ -30,7 +32,7 @@ func (s *service) Create(user *dto.CreateUserRequest) error {
 	utils.Logger.Info().Msgf("Start method create %v", string(userJSON))
 	hashedPassword, err := authentication.HashPassword(user.Password)
 	if err != nil {
-		return errors.New("Unable to create password. Please try again later.")
+		return errors.New("unable to create password. Please try again later")
 	}
 	entityUser := &entity.User{
 		Email:    user.Email,
@@ -38,7 +40,16 @@ func (s *service) Create(user *dto.CreateUserRequest) error {
 		Role:     user.Role,
 		Username: user.Username,
 	}
-	return s.repo.Create(entityUser)
+	if err := s.repo.Create(entityUser); err != nil {
+		return errors.New("user already exist")
+	}
+	_, err = s.cartService.Create(entityUser.ID)
+	if err != nil {
+		return errors.New("error create wallet")
+	}
+
+	println()
+	return err
 }
 
 func (s *service) GetByID(id uint) (*entity.User, error) {
