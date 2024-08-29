@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -41,9 +42,16 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
-		c.Set("userID", claims.UserID)
+		userIDUint, err := strconv.ParseUint(claims.UserID, 10, 32)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID"})
+			c.Abort()
+			return
+		}
+		userID := uint(userIDUint)
+		c.Set("userID", &userID)
 		c.Set("userRole", claims.Role)
+		println(c.Get("userID"))
 		c.Next()
 	}
 

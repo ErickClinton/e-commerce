@@ -7,4 +7,5 @@ type User struct {
 	Password string    `gorm:"not null"`
 	Role     string    `gorm:"not null"`
 	Products []Product `gorm:"foreignKey:UserId"`
+	Cart     []Cart    `gorm:"foreignKey:UserId"`
 }

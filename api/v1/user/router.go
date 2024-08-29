@@ -1,6 +1,7 @@
 package user
 
 import (
+	"eccomerce/internal/v1/cart"
 	"eccomerce/internal/v1/middleware"
 	"eccomerce/internal/v1/user/repository"
 	"eccomerce/internal/v1/user/services"
@@ -10,8 +11,9 @@ import (
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	repo := repository.NewUserRepository(db)
-
-	service := services.NewService(repo)
+	cartRepository := cart.NewCartRepository(db)
+	cartService := cart.NewCartService(cartRepository)
+	service := services.NewService(repo, cartService)
 	handler := NewHandler(service)
 
 	publicRoutes := r.Group("/api/v1/register")

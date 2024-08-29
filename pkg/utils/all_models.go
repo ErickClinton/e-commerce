@@ -6,6 +6,8 @@ import (
 
 func AllModels() []interface{} {
 	return []interface{}{
+		&entity.CartProduct{},
+		&entity.Cart{},
 		&entity.User{},
 		&entity.Product{},
 	}

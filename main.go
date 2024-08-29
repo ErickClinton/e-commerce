@@ -2,6 +2,7 @@ package main
 
 import (
 	"eccomerce/api/v1/auth"
+	"eccomerce/api/v1/cart"
 	"eccomerce/api/v1/product"
 	"eccomerce/api/v1/user"
 	"eccomerce/configs"
@@ -16,6 +17,7 @@ func main() {
 	user.RegisterRoutes(r, db)
 	godotenv.Load()
 	product.RegisterRoutes(r, db)
+	cart.RegisterRoutes(r, db)
 	auth.RegisterRoutes(r, db)
 	utils.ConfigBasicLogger()
 	r.Run(":8080")

@@ -2,6 +2,7 @@ package auth
 
 import (
 	authServices "eccomerce/internal/v1/auth/services"
+	"eccomerce/internal/v1/cart"
 	userRepo "eccomerce/internal/v1/user/repository"
 	userServices "eccomerce/internal/v1/user/services"
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,9 @@ import (
 
 func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	repoUser := userRepo.NewUserRepository(db)
-	userService := userServices.NewService(repoUser)
+	cartRepository := cart.NewCartRepository(db)
+	cartService := cart.NewCartService(cartRepository)
+	userService := userServices.NewService(repoUser, cartService)
 	authService := authServices.NewServiceAuth(userService)
 	authHandler := NewHandlerAuth(authService)
 
