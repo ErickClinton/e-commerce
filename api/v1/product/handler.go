@@ -19,6 +19,16 @@ func NewHandler(service services.ProductService) *Handler {
 
 func (h *Handler) create(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method create")
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		return
+	}
+	userIdPtr, ok := userId.(*uint)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID type"})
+		return
+	}
 
 	var input dto.CreateProductRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -27,6 +37,7 @@ func (h *Handler) create(c *gin.Context) {
 		return
 	}
 
+	input.UserId = *userIdPtr
 	if err := h.service.Create(&input); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

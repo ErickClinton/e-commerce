@@ -1,6 +1,7 @@
 package product
 
 import (
+	"eccomerce/internal/v1/middleware"
 	"eccomerce/internal/v1/product/repository"
 	"eccomerce/internal/v1/product/services"
 
@@ -14,6 +15,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	handler := NewHandler(service)
 
 	v1 := r.Group("/api/v1/product")
+	v1.Use(middleware.AuthMiddleware())
 	{
 		v1.POST("/", handler.create)
 		v1.GET("/:id", handler.GetByID)

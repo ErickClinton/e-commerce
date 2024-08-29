@@ -2,6 +2,7 @@ package services
 
 import (
 	"eccomerce/configs"
+	"eccomerce/internal/v1/cart"
 	"eccomerce/internal/v1/entity"
 	"eccomerce/internal/v1/user/dto"
 	"eccomerce/internal/v1/user/repository"
@@ -22,14 +23,16 @@ type Service interface {
 type service struct {
 	repo          repository.UserRepository
 	walletService walletservices.WalletService
+  cartService cart.CartService
 }
 
-func NewService(repo repository.UserRepository, walletService walletservices.WalletService) Service {
+func NewService(repo repository.UserRepository, walletService walletservices.WalletService,cartService cart.CartService) Service {
 	return &service{
 		repo:          repo,
 		walletService: walletService,
+    cartService: cartService
 	}
-}
+
 
 func (s *service) Create(user *dto.CreateUserRequest) error {
 	userJSON, err := json.MarshalIndent(user, "", "    ")
@@ -59,7 +62,15 @@ func (s *service) Create(user *dto.CreateUserRequest) error {
 		Balance: 0,
 	}
 
-	return s.walletService.Create(walletRequest)
+	if err = s.walletService.Create(walletRequest);err != nil{
+		return errors.New("error create wallet")
+	}
+
+	_, err = s.cartService.Create(entityUser.ID)
+	if err != nil {
+		return errors.New("error create cart")
+	}
+	return err
 }
 
 func (s *service) GetByID(id uint) (*entity.User, error) {
