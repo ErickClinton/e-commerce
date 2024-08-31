@@ -29,7 +29,8 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	protectedRoutes := r.Group("/api/v1/users")
 	protectedRoutes.Use(middleware.AuthMiddleware())
 	{
-		protectedRoutes.GET("/:id", handler.GetByID)
+		protectedRoutes.GET("/:id", middleware.AuthRoleMiddleware("admin"), handler.GetByID)
+		protectedRoutes.GET("/current-user", handler.GetCurrentUser)
 		protectedRoutes.PUT("/:id", handler.UpdateById)
 		protectedRoutes.DELETE("/:id", middleware.AuthRoleMiddleware("admin"), handler.Delete)
 	}

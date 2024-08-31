@@ -77,6 +77,11 @@ func (s *service) GetByID(id uint) (*entity.User, error) {
 	return s.repo.GetByID(id)
 }
 
+func (s *service) GetCurrentUser(id uint) (*entity.User, error) {
+	utils.Logger.Info().Msgf("Start method GetCurrentUser %d", id)
+	return s.repo.GetByID(id)
+}
+
 func (s *service) GetByEmail(email string) (*entity.User, error) {
 	utils.Logger.Info().Msgf("Start method GetByEmail %s", email)
 	return s.repo.GetByEmail(email)
