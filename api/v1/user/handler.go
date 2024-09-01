@@ -49,6 +49,26 @@ func (h *Handler) GetByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
+
+func (h *Handler) GetCurrentUser(c *gin.Context) {
+	utils.Logger.Info().Msg("Start method GetCurrentUser")
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		return
+	}
+
+	userIDUint := userID.(*uint)
+	user, err := h.service.GetByID(*userIDUint)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		utils.Logger.Error().Msgf("Error method GetByID %s", err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": user}) // Converte para o tipo apropriado
+
+}
 func (h *Handler) Update(c *gin.Context) {
 	utils.Logger.Info().Msg("Start method UpdateUser")
 
