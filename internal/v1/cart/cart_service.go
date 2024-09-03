@@ -9,6 +9,7 @@ type CartService interface {
 	AddProductById(addProductDto *dto.AddProductInCart, userId uint) *entity.CartProduct
 	GetCartWithProductByUserId(cartId uint) (*entity.Cart, error)
 	Create(userId uint) (*entity.Cart, error)
+	TotalValue(cartId uint) (float64, error)
 }
 
 type cartService struct {
@@ -52,4 +53,13 @@ func (service cartService) AddProductById(productCartDto *dto.AddProductInCart, 
 
 func (service cartService) GetCartWithProductByUserId(userId uint) (*entity.Cart, error) {
 	return service.repository.getCartWithProductByUserId(userId)
+}
+
+func (service cartService) TotalValue(userId uint) (float64, error) {
+	cartEntity, _ := service.repository.getCartWithProductByUserId(userId)
+	total := 0.0
+	for _, product := range cartEntity.Products {
+		total += product.Product.Price * float64(product.Quantity)
+	}
+	return total, nil
 }

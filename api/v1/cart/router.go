@@ -17,5 +17,6 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	{
 		protectedRoutes.POST("/", handler.addProductInCart)
 		protectedRoutes.GET("/", handler.get)
+		protectedRoutes.GET("/total-value", handler.totalValue)
 	}
 }

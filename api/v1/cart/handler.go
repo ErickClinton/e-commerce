@@ -62,3 +62,21 @@ func (h *Handler) get(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"data": cart})
 }
+
+func (h *Handler) totalValue(c *gin.Context) {
+	utils.Logger.Info().Msg("Start method totalValue")
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User ID not found"})
+		return
+	}
+	userIdPtr, ok := userId.(*uint)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID type"})
+		return
+	}
+
+	totalValue, _ := h.service.TotalValue(*userIdPtr)
+
+	c.JSON(http.StatusCreated, gin.H{"data": totalValue})
+}
