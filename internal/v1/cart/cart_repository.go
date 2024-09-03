@@ -60,7 +60,7 @@ func (c *cartRepository) getCartByUserId(userId uint) (*entity.Cart, error) {
 }
 func (c *cartRepository) getCartWithProductByUserId(userId uint) (*entity.Cart, error) {
 	var cart entity.Cart
-	println(userId)
+
 	if err := c.db.Preload("Products.Product").Where("user_id = ?", userId).First(&cart).Error; err != nil {
 		return nil, err
 	}
